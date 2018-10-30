@@ -10,4 +10,11 @@ namespace ProductBundle\Repository;
  */
 class ProductRepository extends \Doctrine\ORM\EntityRepository
 {
+/*    public function loadTopRatedProducts($count = 5)
+    {
+        $this->createQueryBuilder()
+            ->innerJoin('Reviews')
+            ->groupBy('id')
+            ->orderBy('rating')
+    }*/
 }

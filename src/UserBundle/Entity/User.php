@@ -2,12 +2,13 @@
 
 namespace UserBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * User
  *
- * @ORM\Table(name="user")
+ * @ORM\Table(name="app_users")
  * @ORM\Entity(repositoryClass="UserBundle\Repository\UserRepository")
  */
 class User
@@ -49,6 +50,30 @@ class User
      */
     private $roles;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="ProductBundle\Entity\Reviews", mappedBy="userId")
+     */
+    private $reviews;
+
+    public function __construct()
+    {
+        $this->reviews = new ArrayCollection();
+    }
+
+    /**
+     * Set Id
+     *
+     * @param integer $id
+     *
+     * @return User
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
 
     /**
      * Get id
@@ -139,10 +164,15 @@ class User
      *
      * @return User
      */
-    public function setRoles($roles)
+    public function setRoles(array $roles = [])
     {
-        $this->roles = $roles;
-
+        if(!($roles)) {
+            $this->roles = ['ROLE_USER'];
+        }
+        else {
+            $this->roles = $roles;
+        }
+        // allows for chaining
         return $this;
     }
 
@@ -153,7 +183,24 @@ class User
      */
     public function getRoles()
     {
-        return $this->roles;
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+
+
+    /**
+     * Returns the salt that was originally used to encode the password.
+     *
+     * This can return null if the password was not encoded using a salt.
+     *
+     * @return string|null The salt
+     */
+    public function getSalt()
+    {
+        return null;
     }
 }
 

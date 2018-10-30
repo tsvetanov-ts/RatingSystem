@@ -2,6 +2,8 @@
 
 namespace ProductBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -34,6 +36,17 @@ class Product
      * @ORM\Column(name="description", type="string", length=255)
      */
     private $description;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Reviews", mappedBy="productId")
+     */
+    private $reviews;
+
+    public function __construct()
+    {
+        $this->reviews = new ArrayCollection();
+    }
 
 
     /**

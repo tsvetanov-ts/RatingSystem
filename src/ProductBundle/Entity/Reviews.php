@@ -51,17 +51,24 @@ class Reviews
 
     /**
      * @var int
-     *
+     * @@ORM\ManyToOne(targetEntity="Product", mappedBy="id", cascade={"remove"}, orphanRemoval=true)
      * @ORM\Column(name="product_id", type="integer")
      */
     private $productId;
 
     /**
      * @var int
-     *
-     * @ORM|Column(name="user_id", type="integer)
+     * @@ORM\ManyToOne(targetEntity="UserBundle\Entity\User", mappedBy="id", cascade={"remove"}, orphanRemoval=true)
+     *  @ORM\Column(name="user_id", type="integer")
      */
     private $userId;
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="is_approved", type="boolean")
+     */
+
+    private $isApproved;
 
 
     /**
@@ -145,5 +152,45 @@ class Reviews
     {
         return $this->productId;
     }
+
+    /**
+     * @return int
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    /**
+     * @param int $userId
+     * @return Reviews
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isApproved()
+    {
+        return $this->isApproved;
+    }
+
+    /**
+     * @param bool $isApproved
+     * @return Reviews
+     */
+    public function setIsApproved($isApproved)
+    {
+        $this->isApproved = $isApproved;
+        return $this;
+    }
+
+
+
+
 }
 

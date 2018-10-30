@@ -1,24 +1,40 @@
-# To get started with security, check out the documentation:
-# https://symfony.com/doc/current/security.html
 security:
+    encoders:
+        UserBundle\Entity\User: bcrypt
 
-    # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
+    role_hierarchy:
+        ROLE_ADMIN:       [ROLE_USER, ROLE_EVENT_CREATE, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
     providers:
-        in_memory:
-            memory: ~
+        our_database_users:
+            entity: { class: UserBundle:User }
 
     firewalls:
-        # disables authentication for assets and the profiler, adapt it according to your needs
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
-
-        main:
+        secured_area:
+            pattern:    ^/
+            form_login:
+                check_path: login_check
+                login_path: login_form
+            logout:
+                path:   logout
+                target: event
             anonymous: ~
-            # activate different ways to authenticate
+            switch_user: ~
+            remember_me:
+                key: "Order 1138"
+            #http_basic:
+            #    realm: "Secured Demo Area"
 
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-            #http_basic: ~
+    access_control:
+    - { path: ^/admin, role: ROLE_ADMIN }
+    - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/(css|js), roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/(_wdt|_profiler), roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/, roles: ROLE_USER }
+    - { path: ^/product, role: ROLE_USER }
+    - { path: ^/products, role: ROLE_USER }
 
-            # https://symfony.com/doc/current/security/form_login_setup.html
-            #form_login: ~
+
