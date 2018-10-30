@@ -20,7 +20,7 @@ class LoadUsers implements FixtureInterface, ContainerAwareInterface
 
 
         $admin = new User();
-        $admin->setName('admin');
+        $admin->setUsername('admin');
         $admin->setId(1);
         $admin->setPassword($this->encodePassword($admin, 'admin123'));
         $admin->setRoles(['ROLE_ADMIN','ROLE_USER']);
@@ -30,7 +30,7 @@ class LoadUsers implements FixtureInterface, ContainerAwareInterface
         for($i = 2; $i < 11; $i++) {
             $users[$i] = new User();
             $users[$i]->setId($i);
-            $users[$i]->setName("User$i");
+            $users[$i]->setUsername("User$i");
             $users[$i]->setRoles(['ROLE_USER']);
             $users[$i]->setPassword($this->encodePassword($users[$i], "$i"."userpass"));
             $users[$i]->setEmail("user.no$i@gmail.com");

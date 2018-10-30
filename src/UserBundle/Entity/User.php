@@ -4,6 +4,7 @@ namespace UserBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User
@@ -11,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="app_users")
  * @ORM\Entity(repositoryClass="UserBundle\Repository\UserRepository")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @var int
@@ -25,9 +26,9 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, unique=true)
+     * @ORM\Column(name="username", type="string", length=255, unique=true)
      */
-    private $name;
+    private $username;
 
     /**
      * @var string
@@ -88,13 +89,13 @@ class User
     /**
      * Set name
      *
-     * @param string $name
+     * @param string $username
      *
      * @return User
      */
-    public function setName($name)
+    public function setUsername($username)
     {
-        $this->name = $name;
+        $this->username = $username;
 
         return $this;
     }
@@ -104,9 +105,9 @@ class User
      *
      * @return string
      */
-    public function getName()
+    public function getUsername()
     {
-        return $this->name;
+        return $this->username;
     }
 
     /**
@@ -202,5 +203,17 @@ class User
     {
         return null;
     }
+
+    /**
+     * Removes sensitive data from the user.
+     *
+     * This is important if, at any given point, sensitive information like
+     * the plain-text password is stored on this object.
+     */
+    public function eraseCredentials()
+    {
+        $this->password = null;
+    }
+
 }
 
