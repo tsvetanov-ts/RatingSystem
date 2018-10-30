@@ -4,4 +4,14 @@
 
 {% block body %}
 <h1>Welcome to the Products:index page</h1>
+    {% if  products is empty %}
+        <h2>No products found!<h2>
+    {% else %}
+        <ul>
+        {% for product in products %}
+            <li>product.name</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
 {% endblock %}

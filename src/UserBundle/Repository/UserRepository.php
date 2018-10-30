@@ -3,9 +3,6 @@
 namespace UserBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 /**
@@ -38,9 +35,15 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
         return $user;
     }
 
-//    public function loadMostActiveUsers($count = 'all')
-//    {
-//        return $this->createQueryBuilder()
-//            ->innerJoin()
-//    }
+    //todo verify this works as expected
+    public function loadMostActiveUsers()
+    {
+        return $this->createQueryBuilder('u')
+            ->select(['u.username', 'COUNT(*)'])
+            ->from('User','u')
+            ->innerJoin('ProductBundle\Entity\Reviews','r')
+            ->groupBy('r.user_id')
+            ->orderBy('COUNT(*)')
+            ->orderBy('COUNT(*)','DESC');
+    }
 }

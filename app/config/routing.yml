@@ -1,15 +1,18 @@
 product_product:
-    resource: "@ProductBundle/Controller/ProductController.php"
+    resource: "@ProductBundle/Controller"
     type:     annotation
 
-product:
-    resource: "@ProductBundle/Resources/config/routing.yml"
-    prefix:   /
+#product:
+#    resource: "@ProductBundle/Resources/config/routing.yml"
+#    prefix:   /
 
 user:
     resource: "@UserBundle/Controller"
     type: annotation
-
+#
+#admin:
+#    resource: "@ProductBundle/Controller"
+#    type: annotation
 
 app:
     resource: '@AppBundle/Controller/'
