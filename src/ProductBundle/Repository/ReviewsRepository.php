@@ -14,10 +14,25 @@ class ReviewsRepository extends EntityRepository
     public function loadProductReviewsByUser()
     {
         //todo verify this works as expected
-        $this->createQueryBuilder('p')
+        return $this->createQueryBuilder('p')
             ->select(['p.name','r.rating','u.username', 'r.is_approved'])
             ->from('Reviews','r')
             ->innerJoin('Product', 'p')
-            ->innerJoin('UserBundle\Entity\User','u');
+            ->innerJoin('UserBundle\Entity\User','u')
+            ->getQuery()
+            ->execute();
+    }
+
+    public function loadAverageProductRating($productId)
+    {
+        return $this->createQueryBuilder('p')
+            ->select(['p.name','ROUND(AVG(r.rating),2)'])
+            ->from('Product', 'p')
+            ->innerJoin('Reviews','r')
+            ->groupBy('r.product_id')
+            ->having('p.id = ')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->execute();
     }
 }

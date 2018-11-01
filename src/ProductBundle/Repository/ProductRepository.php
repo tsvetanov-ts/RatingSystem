@@ -16,12 +16,29 @@ class ProductRepository extends EntityRepository
     public function loadTopRatedProducts($limit = 5)
     {
         //todo verify this works as expected
-        $this->createQueryBuilder('p')
+        return $this->createQueryBuilder('p')
             ->select(['p.name','ROUND(AVG(r.rating),2)'])
             ->from('Product', 'p')
             ->innerJoin('Reviews','r')
             ->groupBy('r.product_id')
             ->orderBy('AVG(r.rating)','DESC')
-            ->setMaxResults($limit);
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->execute();
+
+    }
+
+    public function loadAverageProductRating($productId)
+    {
+        return $this->createQueryBuilder('p')
+            ->select(['p.name','ROUND(AVG(r.rating),2)'])
+            ->from('Product', 'p')
+            ->innerJoin('Reviews','r')
+            ->groupBy('r.product_id')
+            ->having('p.id = ')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->execute();
+
     }
 }

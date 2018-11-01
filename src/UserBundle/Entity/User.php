@@ -53,13 +53,23 @@ class User implements UserInterface
 
 
     /**
-     * @ORM\OneToMany(targetEntity="ProductBundle\Entity\Reviews", mappedBy="userId")
+     * @ORM\OneToMany(
+     *     targetEntity="ProductBundle\Entity\Reviews", mappedBy="user"
+     * )
      */
     private $reviews;
+
+    /**
+     * @ORM\OneToMany(
+     *     targetEntity="ProductBundle\Entity\Product", mappedBy="user"
+     * )
+     */
+    private $products;
 
     public function __construct()
     {
         $this->reviews = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
     /**
@@ -214,6 +224,46 @@ class User implements UserInterface
     {
         $this->password = null;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getReviews()
+    {
+        return $this->reviews;
+    }
+
+    /**
+     * @param mixed $reviews
+     * @return User
+     */
+    public function setReviews($reviews)
+    {
+        $this->reviews = $reviews;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProducts()
+    {
+        return $this->products;
+    }
+
+    /**
+     * @param mixed $products
+     * @return User
+     */
+    public function setProducts($products)
+    {
+        $this->products = $products;
+        return $this;
+    }
+
+
+
+
 
 }
 

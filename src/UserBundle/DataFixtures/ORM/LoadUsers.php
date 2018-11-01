@@ -3,12 +3,13 @@
 namespace UserBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class LoadUsers implements FixtureInterface, ContainerAwareInterface
+class LoadUsers implements FixtureInterface, ContainerAwareInterface, OrderedFixtureInterface
 {
     /**
      * @var ContainerInterface
@@ -27,10 +28,10 @@ class LoadUsers implements FixtureInterface, ContainerAwareInterface
         $admin->setEmail('cwakster@gmail.com');
         $manager->persist($admin);
 
-        for($i = 2; $i < 11; $i++) {
+        for($i = 2; $i < 12; $i++) {
             $users[$i] = new User();
             $users[$i]->setId($i);
-            $users[$i]->setUsername("User$i");
+            $users[$i]->setUsername("user$i");
             $users[$i]->setRoles(['ROLE_USER']);
             $users[$i]->setPassword($this->encodePassword($users[$i], "$i"."userpass"));
             $users[$i]->setEmail("user.no$i@gmail.com");
@@ -54,5 +55,10 @@ class LoadUsers implements FixtureInterface, ContainerAwareInterface
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
+    }
+
+    public function getOrder()
+    {
+        return 10;
     }
 }

@@ -10,10 +10,11 @@ namespace ProductBundle\DataFixtures\ORM;
 
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use ProductBundle\Entity\Product;
 
-class LoadProducts implements FixtureInterface
+class LoadProducts implements FixtureInterface, OrderedFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
@@ -27,5 +28,10 @@ class LoadProducts implements FixtureInterface
         }
 
         $manager->flush();
+    }
+
+    public function getOrder()
+    {
+        return 20;
     }
 }

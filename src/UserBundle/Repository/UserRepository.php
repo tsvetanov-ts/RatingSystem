@@ -21,7 +21,8 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
             ->setParameter('email', $username)
             ->getQuery()
             ->getOneOrNullResult()
-            ;
+            ->execute();
+
     }
 
     public function loadUserByUsername($username)
@@ -44,6 +45,8 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
             ->innerJoin('ProductBundle\Entity\Reviews','r')
             ->groupBy('r.user_id')
             ->orderBy('COUNT(*)')
-            ->orderBy('COUNT(*)','DESC');
+            ->orderBy('COUNT(*)','DESC')
+            ->getQuery()
+            ->execute();
     }
 }

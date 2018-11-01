@@ -3,10 +3,13 @@
 namespace ProductBundle\Controller;
 
 use ProductBundle\Entity\Product;
+use ProductBundle\Repository\ProductRepository;
+use ProductBundle\Repository\ReviewsRepository;
+use ProductBundle\Entity\Reviews;
+use UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
-
 /**
  * Product controller.
  *
@@ -65,10 +68,14 @@ class ProductController extends Controller
      */
     public function showAction(Product $product)
     {
-        $deleteForm = $this->createDeleteForm($product);
+        $em = $this->getDoctrine()->getManager();
 
+        $deleteForm = $this->createDeleteForm($product);
+        $reviewsByProduct = $em->getRepository('ProductBundle:Product')->loadAverageProductRating($product->getId());
+//        die(var_dump($reviewsByProduct));
         return $this->render('product/show.html.twig', array(
             'product' => $product,
+            'reviews' => $reviewsByProduct,
             'delete_form' => $deleteForm->createView(),
         ));
     }

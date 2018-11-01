@@ -2,9 +2,11 @@
 
 namespace ProductBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Symfony\Component\Validator\Constraints as Assert;
+use UserBundle\Entity\User;
 
 /**
  * Reviews
@@ -12,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="reviews",
  *     uniqueConstraints={
  *          @UniqueConstraint(name="unique_review",
- *              columns={"id","user_id"})
+ *              columns={"product_id","user_id"})
  *     }
  * )
  * @ORM\Entity(repositoryClass="ProductBundle\Repository\ReviewsRepository")
@@ -50,18 +52,69 @@ class Reviews
     private $description;
 
     /**
+     * @ORM\ManyToOne(
+     *      targetEntity="ProductBundle\Entity\Product"
+     *
+     * )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    private $product;
+
+    /**
+     * @ORM\ManyToOne(
+     *      targetEntity="UserBundle\Entity\User",
+     *
+     * )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    private $user;
+    /**
      * @var int
-     * @@ORM\ManyToOne(targetEntity="Product", mappedBy="id", cascade={"remove"}, orphanRemoval=true)
      * @ORM\Column(name="product_id", type="integer")
      */
-    private $productId;
+    private $product_id;
 
     /**
      * @var int
-     * @@ORM\ManyToOne(targetEntity="UserBundle\Entity\User", mappedBy="id", cascade={"remove"}, orphanRemoval=true)
-     *  @ORM\Column(name="user_id", type="integer")
+     * @ORM\Column(name="user_id", type="integer")
      */
-    private $userId;
+    private $user_id;
+
+    /**
+     * @return int
+     */
+    public function getProductId(): int
+    {
+        return $this->product_id;
+    }
+
+    /**
+     * @param int $product_id
+     * @return Reviews
+     */
+    public function setProductId(int $product_id): Reviews
+    {
+        $this->product_id = $product_id;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUserId(): int
+    {
+        return $this->user_id;
+    }
+
+    /**
+     * @param int $user_id
+     * @return Reviews
+     */
+    public function setUserId(int $user_id): Reviews
+    {
+        $this->user_id = $user_id;
+        return $this;
+    }
 
     /**
      * @var boolean
@@ -70,6 +123,10 @@ class Reviews
 
     private $isApproved;
 
+    public function __construct()
+    {
+        $this->attendees = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -130,44 +187,44 @@ class Reviews
     }
 
     /**
-     * Set productId
+     * Set product
      *
-     * @param integer $productId
+     * @param Product $product
      *
      * @return Reviews
      */
-    public function setProductId($productId)
+    public function setProduct(Product $product)
     {
-        $this->productId = $productId;
+        $this->product = $product;
 
         return $this;
     }
 
     /**
-     * Get productId
+     * Get product
      *
-     * @return int
+     * @return Product
      */
-    public function getProductId()
+    public function getProduct()
     {
-        return $this->productId;
+        return $this->product;
     }
 
     /**
-     * @return int
+     * @return User
      */
-    public function getUserId()
+    public function getUser()
     {
-        return $this->userId;
+        return $this->user;
     }
 
     /**
-     * @param int $userId
+     * @param User $user
      * @return Reviews
      */
-    public function setUserId($userId)
+    public function setUser(User $user)
     {
-        $this->userId = $userId;
+        $this->user = $user;
         return $this;
     }
 

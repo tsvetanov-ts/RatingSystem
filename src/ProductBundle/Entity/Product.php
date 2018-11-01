@@ -39,7 +39,7 @@ class Product
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Reviews", mappedBy="productId")
+     * @ORM\OneToMany(targetEntity="Reviews", mappedBy="product")
      */
     private $reviews;
 
