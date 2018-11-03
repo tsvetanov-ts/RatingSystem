@@ -13,26 +13,32 @@ class ReviewsRepository extends EntityRepository
 {
     public function loadProductReviewsByUser()
     {
-        //todo verify this works as expected
-        return $this->createQueryBuilder('p')
-            ->select(['p.name','r.rating','u.username', 'r.is_approved'])
-            ->from('Reviews','r')
-            ->innerJoin('Product', 'p')
-            ->innerJoin('UserBundle\Entity\User','u')
-            ->getQuery()
-            ->execute();
+
+        $query = $this->getEntityManager()->createQuery('SELECT p.id AS productId, p.name AS productName, r.rating, r.description, r.isApproved , r.rating, u.username FROM ProductBundle\Entity\Reviews r 
+                                                                JOIN ProductBundle\Entity\Product p WHERE r.products = p.id
+                                                                JOIN UserBundle\Entity\User u WHERE u.id = r.user
+                                                        ');
+
+        return $query->getResult();
     }
 
     public function loadAverageProductRating($productId)
     {
-        return $this->createQueryBuilder('p')
-            ->select(['p.name','ROUND(AVG(r.rating),2)'])
-            ->from('Product', 'p')
-            ->innerJoin('Reviews','r')
-            ->groupBy('r.product_id')
-            ->having('p.id = ')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->execute();
+
+        $query = $this->getEntityManager()->createQuery('SELECT p.name, AVG(r.rating) FROM ProductBundle\Entity\Reviews r 
+                                                                JOIN ProductBundle\Entity\Product p 
+                                                                WHERE r.products = p.id AND p.id = :productId
+                                                        ');
+        $query->setParameter('productId', $productId);
+
+        return $query->getResult();
+    }
+
+    public function selectStar()
+    {
+        $query = $this->getEntityManager()->createQuery('SELECT r.id , r.rating FROM ProductBundle\Entity\Reviews r JOIN ProductBundle\Entity\Product p WHERE r.products = p.id 
+                                                            ');
+
+        return $query->getResult();
     }
 }

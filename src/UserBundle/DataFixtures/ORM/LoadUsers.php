@@ -14,7 +14,7 @@ class LoadUsers implements FixtureInterface, ContainerAwareInterface, OrderedFix
     /**
      * @var ContainerInterface
      */
-    private $container;
+    protected $container;
 
     public function load(ObjectManager $manager)
     {

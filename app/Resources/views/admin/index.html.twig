@@ -1,7 +1,90 @@
-{% extends "::base.html.twig" %}
+{% extends 'base.html.twig' %}
 
 {% block title %}ProductBundle:Admin:index{% endblock %}
 
 {% block body %}
 <h1>Welcome to the Admin:index page</h1>
+    </br>
+    <h2>Product reviews</h2>
+
+    <table class="pure-table">
+        <thead>
+        <tr>
+            <th>Product</th>
+            <th>Rating</th>
+            <th>Description</th>
+            <th>User</th>
+            <th>Approved</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for review in reviews %}
+            <tr>
+                <td><a href="{{ path('product_show', { 'id': review.productId }) }}">{{ review.productName }}</a></td>
+                {#<td>{{ review.productName }}</td>#}
+                <td>{{ review.rating }}</td>
+                <td>{{ review.description }}</td>
+                <td>{{ review.username }}</td>
+                <td>
+                    <a href="{{ path('product_show', { 'id': review.productId }) }}">
+                        {% if(review.isApproved) == 1 %}
+                            yes
+                        {% else %}
+                            no
+                        {% endif %}
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </br></br></br>
+
+    <h2>Top rated products</h2>
+
+    <table class="pure-table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Rate</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for product in topProducts %}
+            <tr>
+                <td><a href="{{ path('product_show', { 'id': product.id }) }}">{{ product.id }}</a></td>
+                <td>{{ product.name }}</td>
+                <td>
+                    <a href="{{ path('product_show', { 'id': product.id }) }}">{{ product.product_rate| round(3) }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </br></br></br>
+    <h2>Most active users</h2>
+
+    <table class="pure-table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Total reviews</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td><a href="{{ path('product_show', { 'id': user.id }) }}">{{ user.id }}</a></td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.total_reviews }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+
 {% endblock %}

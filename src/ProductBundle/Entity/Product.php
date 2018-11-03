@@ -37,16 +37,8 @@ class Product
      */
     private $description;
 
+//    private $reviews;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Reviews", mappedBy="product")
-     */
-    private $reviews;
-
-    public function __construct()
-    {
-        $this->reviews = new ArrayCollection();
-    }
 
 
     /**
@@ -106,5 +98,27 @@ class Product
     {
         return $this->description;
     }
+
+
+
+//    /**
+//     * @return mixed
+//     */
+//    public function getReviews()
+//    {
+//        return $this->reviews;
+//    }
+//
+//    /**
+//     * @param mixed $reviews
+//     * @return Product
+//     */
+//    public function setReviews($reviews)
+//    {
+//        $this->reviews = $reviews;
+//        return $this;
+//    }
+
+
 }
 

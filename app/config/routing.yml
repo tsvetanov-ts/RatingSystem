@@ -1,5 +1,6 @@
 product_product:
     resource: "@ProductBundle/Controller"
+    prefix: /
     type:     annotation
 
 #product:
@@ -9,11 +10,9 @@ product_product:
 user:
     resource: "@UserBundle/Controller"
     type: annotation
-#
-#admin:
-#    resource: "@ProductBundle/Controller"
-#    type: annotation
-
 app:
     resource: '@AppBundle/Controller/'
+    type: annotation
+admin:
+    resource: '@ProductBundle/Controller/AdminController.php'
     type: annotation

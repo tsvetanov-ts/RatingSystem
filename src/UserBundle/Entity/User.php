@@ -2,17 +2,22 @@
 
 namespace UserBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\Role\Role;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Serializable;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
-
 /**
  * User
  *
  * @ORM\Table(name="app_users")
  * @ORM\Entity(repositoryClass="UserBundle\Repository\UserRepository")
+ * @UniqueEntity(fields="username", message="That username is taken!")
+ * @UniqueEntity(fields="email", message="That email is taken!")
  */
-class User implements UserInterface
+class User implements UserInterface, Serializable
 {
     /**
      * @var int
@@ -34,6 +39,8 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, unique=true)
+     * @Assert\NotBlank(message="Give us at least 3 characters")
+     * @Assert\Length(min=3, minMessage="Give us at least 3 characters!")
      */
     private $email;
 
@@ -41,6 +48,8 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Email
      */
     private $password;
 
@@ -52,25 +61,25 @@ class User implements UserInterface
     private $roles;
 
 
-    /**
-     * @ORM\OneToMany(
-     *     targetEntity="ProductBundle\Entity\Reviews", mappedBy="user"
-     * )
-     */
-    private $reviews;
-
-    /**
-     * @ORM\OneToMany(
-     *     targetEntity="ProductBundle\Entity\Product", mappedBy="user"
-     * )
-     */
-    private $products;
-
-    public function __construct()
-    {
-        $this->reviews = new ArrayCollection();
-        $this->products = new ArrayCollection();
-    }
+//    /**
+//     * @ORM\OneToMany(
+//     *     targetEntity="ProductBundle\Entity\Reviews", mappedBy="user"
+//     * )
+//     */
+//    private $reviews;
+//
+//    /**
+//     * @ORM\OneToMany(
+//     *     targetEntity="ProductBundle\Entity\Reviews", mappedBy="products"
+//     * )
+//     */
+//    private $products;
+//
+//    public function __construct()
+//    {
+//        $this->reviews = new ArrayCollection();
+//        $this->products = new ArrayCollection();
+//    }
 
     /**
      * Set Id
@@ -225,42 +234,60 @@ class User implements UserInterface
         $this->password = null;
     }
 
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->username,
+            $this->password,
+        ));
+    }
+
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->username,
+            $this->password,
+            ) = unserialize($serialized);
+    }
+
     /**
      * @return mixed
      */
-    public function getReviews()
-    {
-        return $this->reviews;
-    }
-
-    /**
-     * @param mixed $reviews
-     * @return User
-     */
-    public function setReviews($reviews)
-    {
-        $this->reviews = $reviews;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getProducts()
-    {
-        return $this->products;
-    }
-
-    /**
-     * @param mixed $products
-     * @return User
-     */
-    public function setProducts($products)
-    {
-        $this->products = $products;
-        return $this;
-    }
-
+//    public function getReviews()
+//    {
+//        return $this->reviews;
+//    }
+//
+//    /**
+//     * @param mixed $reviews
+//     * @return User
+//     */
+//    public function setReviews($reviews)
+//    {
+//        $this->reviews = $reviews;
+//        return $this;
+//    }
+//
+//    /**
+//     * @return mixed
+//     */
+//    public function getProducts()
+//    {
+//        return $this->products;
+//    }
+//
+//    /**
+//     * @param mixed $products
+//     * @return User
+//     */
+//    public function setProducts($products)
+//    {
+//        $this->products = $products;
+//        return $this;
+//    }
+//
 
 
 

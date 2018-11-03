@@ -3,8 +3,12 @@
 namespace UserBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
+
 /**
  * UserRepository
  *
@@ -20,8 +24,8 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
             ->setParameter('username', $username)
             ->setParameter('email', $username)
             ->getQuery()
-            ->getOneOrNullResult()
-            ->execute();
+            ->getOneOrNullResult();
+
 
     }
 
@@ -39,14 +43,12 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
     //todo verify this works as expected
     public function loadMostActiveUsers()
     {
-        return $this->createQueryBuilder('u')
-            ->select(['u.username', 'COUNT(*)'])
-            ->from('User','u')
-            ->innerJoin('ProductBundle\Entity\Reviews','r')
-            ->groupBy('r.user_id')
-            ->orderBy('COUNT(*)')
-            ->orderBy('COUNT(*)','DESC')
-            ->getQuery()
-            ->execute();
+        $query = $this->getEntityManager()->createQuery('SELECT u.id, u.username, COUNT(u.username) total_reviews FROM UserBundle\Entity\User u
+                                                            JOIN ProductBundle\Entity\Reviews r WHERE u.id = r.user 
+                                                            GROUP BY u.username
+                                                            ORDER BY total_reviews DESC');
+
+        return $query->getResult();
+
     }
 }

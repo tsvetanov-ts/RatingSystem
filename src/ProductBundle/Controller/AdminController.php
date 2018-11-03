@@ -21,18 +21,24 @@ class AdminController extends Controller
     /**
      * @Route("/admin", name="admin_index")
      * @Security("has_role('ROLE_ADMIN')")
+     * @Template()
+     * @Method("GET")
      */
 
     public function indexAction()
     {
-
+        $users = [];
         $em = $this->getDoctrine()->getManager();
-        $products = $em->getRepository('ProductBundle:Product')->loadTopRatedProducts();
+        $topProducts = $em->getRepository('ProductBundle:Product')->loadTopRatedProducts();
         $users = $em->getRepository('UserBundle:User')->loadMostActiveUsers();
         $reviewsByProduct = $em->getRepository('ProductBundle:Reviews')->loadProductReviewsByUser();
-        return $this->render('ProductBundle:Admin:index.html.twig', array(
-            ['products' =>$products, 'users' =>$users, 'reviews'=>$reviewsByProduct]
-        ));
+//        die([
+//            var_dump([$reviewsByProduct])
+//        ]);
+        print_r(['reviews'=>$reviewsByProduct, 'users'=> $users, 'topProducts'=>$topProducts]);
+        return $this->render('admin/index.html.twig',
+            ['topProducts' =>$topProducts, 'users' =>$users, 'reviews'=>$reviewsByProduct]
+        );
     }
 
 }
