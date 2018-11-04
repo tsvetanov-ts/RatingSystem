@@ -25,7 +25,7 @@ class LoadReviews implements FixtureInterface, OrderedFixtureInterface
         $reviews = [];
         //Loop through previously created products
         for ($i = 1; $i < 11; $i++) {
-            //Loop through users but don't randomly skip some to make it more random
+            //Loop through users but randomly skip some to make it more random
             for ($j = 2; $j < 12; $j++) {
 
 
@@ -38,16 +38,13 @@ class LoadReviews implements FixtureInterface, OrderedFixtureInterface
                 //hacky way to randomly set review to approved or not
                 $random_is_approved = random_int(2, 3) % 2 ? true : false;
                 /** @var User $user */
-                $user = $manager->getRepository('UserBundle:User')->findOneBy(['id' => $j]);
+                $user = $manager->getRepository(User::class)->findOneBy(['id' => $j]);
                 /** @var Product $product */
-//                $repo = new ProductRepository($manager,Product::class);
-                $product = $manager->getRepository('ProductBundle:Product')->findOneBy(['id' => $i])->;
-
-//                var_dump([['repo'=> var_dump($manager->getRepository('UserBundle:User')),'ids' => $i, 'ji' => $j], 'user' => $user, 'product' => $product]);
+                $product = $manager->getRepository(Product::class)->findOneBy(['id' => $i]);
 
                 $reviews[$i] = new Reviews();
                 $reviews[$i]->setProducts($product);
-                $reviews[$i]->setUsers($user);
+                $reviews[$i]->setUser($user);
                 $reviews[$i]->setRating($random_rating);
                 $reviews[$i]->setIsApproved($random_is_approved);
 

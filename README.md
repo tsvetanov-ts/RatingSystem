@@ -1,7 +1,7 @@
 Rating System
 =============
 
-A Symfony project created on October 29, 2018, 5:34 pm.
+A Symfony project representing review system
 
 
 Installation steps
@@ -15,6 +15,11 @@ Installation steps
 
 `php ./app/console doctrine:fixtures:load`
 
+Fixtures order is
+
+`php ./app/console doctrine:fixtures:load --append --fixtures=./src/UserBundle/DataFixtures/ORM/LoadUsers.php`
+`php ./app/console doctrine:fixtures:load --append --fixtures=./src/ProductBundle/DataFixtures/ORM/LoadProducts.php`
+`php ./app/console doctrine:fixtures:load --append --fixtures=./src/ProductBundle/DataFixtures/ORM/LoadReviews.php`
 
 Find hardcoded users (admin & customers) and their credentials in 
 `UserBundle\DataFixtures\ORM\LoadUsers.php`
@@ -22,4 +27,4 @@ Find hardcoded users (admin & customers) and their credentials in
 
 Routes:  `php ./app/console debug:router`
 
-DB credentials can be changed from `./app/config/parameters.yml` if needed.
+DB credentials (database name as well) can be changed from `./app/config/parameters.yml` if needed.
