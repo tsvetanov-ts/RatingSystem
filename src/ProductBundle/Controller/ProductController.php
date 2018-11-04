@@ -3,10 +3,7 @@
 namespace ProductBundle\Controller;
 
 use ProductBundle\Entity\Product;
-use ProductBundle\Repository\ProductRepository;
-use ProductBundle\Repository\ReviewsRepository;
-use ProductBundle\Entity\Reviews;
-use UserBundle\Entity\User;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
@@ -22,6 +19,7 @@ class ProductController extends Controller
      *
      * @Route("/", name="product_index")
      * @Method("GET")
+     * @Security("has_role('ROLE_USER')")
      */
     public function indexAction()
     {
@@ -39,6 +37,7 @@ class ProductController extends Controller
      *
      * @Route("/new", name="product_new")
      * @Method({"GET", "POST"})
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function newAction(Request $request)
     {
@@ -65,6 +64,7 @@ class ProductController extends Controller
      *
      * @Route("/{id}", name="product_show")
      * @Method("GET")
+     * @Security("has_role('ROLE_USER')")
      */
     public function showAction(Product $product)
     {
@@ -115,6 +115,7 @@ class ProductController extends Controller
      * Deletes a product entity.
      *
      * @Route("/{id}", name="product_delete")
+     * @Security("has_role('ROLE_ADMIN')")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, Product $product)

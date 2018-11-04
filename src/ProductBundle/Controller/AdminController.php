@@ -32,10 +32,6 @@ class AdminController extends Controller
         $topProducts = $em->getRepository('ProductBundle:Product')->loadTopRatedProducts();
         $users = $em->getRepository('UserBundle:User')->loadMostActiveUsers();
         $reviewsByProduct = $em->getRepository('ProductBundle:Reviews')->loadProductReviewsByUser();
-//        die([
-//            var_dump([$reviewsByProduct])
-//        ]);
-//        print_r(['reviews'=>$reviewsByProduct, 'users'=> $users, 'topProducts'=>$topProducts]);
         return $this->render('admin/index.html.twig',
             ['topProducts' =>$topProducts, 'users' =>$users, 'reviews'=>$reviewsByProduct]
         );
@@ -44,9 +40,8 @@ class AdminController extends Controller
     /**
      * @Route("/admin/review", name="admin_update_review")
      * @Security("has_role('ROLE_ADMIN')")
-     * @Method("GET")
+     * @Method({"GET", "POST"}) GET for testing only - todo method must be changed!
      */
-
     public function updaeReviewAction(Request $request)
     {
         $params = $request->query->all();
