@@ -15,6 +15,7 @@
             <th>Description</th>
             <th>User</th>
             <th>Approved</th>
+            <th>Change status</th>
 
         </tr>
         </thead>
@@ -27,14 +28,19 @@
                 <td>{{ review.description }}</td>
                 <td>{{ review.username }}</td>
                 <td>
-                    <a href="{{ path('product_show', { 'id': review.productId }) }}">
                         {% if(review.isApproved) == 1 %}
                             yes
                         {% else %}
                             no
                         {% endif %}
-                    </a>
                 </td>
+                <td><a href="{{ path('admin_update_review', { 'id': review.id,'isApproved': review.isApproved}) }}">
+                        {% if(review.isApproved) == 1 %}
+                             disprove
+                        {% else %}
+                            approve
+                    </a>
+                    {% endif %}</td>
             </tr>
         {% endfor %}
         </tbody>

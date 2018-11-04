@@ -14,9 +14,10 @@ class ReviewsRepository extends EntityRepository
     public function loadProductReviewsByUser()
     {
 
-        $query = $this->getEntityManager()->createQuery('SELECT p.id AS productId, p.name AS productName, r.rating, r.description, r.isApproved , r.rating, u.username FROM ProductBundle\Entity\Reviews r 
+        $query = $this->getEntityManager()->createQuery('SELECT r.id, p.id AS productId, p.name AS productName, r.rating, r.description, r.isApproved , r.rating, u.username FROM ProductBundle\Entity\Reviews r 
                                                                 JOIN ProductBundle\Entity\Product p WHERE r.products = p.id
                                                                 JOIN UserBundle\Entity\User u WHERE u.id = r.user
+                                                                ORDER BY r.id DESC
                                                         ');
 
         return $query->getResult();

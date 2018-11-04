@@ -35,10 +35,37 @@ class AdminController extends Controller
 //        die([
 //            var_dump([$reviewsByProduct])
 //        ]);
-        print_r(['reviews'=>$reviewsByProduct, 'users'=> $users, 'topProducts'=>$topProducts]);
+//        print_r(['reviews'=>$reviewsByProduct, 'users'=> $users, 'topProducts'=>$topProducts]);
         return $this->render('admin/index.html.twig',
             ['topProducts' =>$topProducts, 'users' =>$users, 'reviews'=>$reviewsByProduct]
         );
+    }
+
+    /**
+     * @Route("/admin/review", name="admin_update_review")
+     * @Security("has_role('ROLE_ADMIN')")
+     * @Method("GET")
+     */
+
+    public function updaeReviewAction(Request $request)
+    {
+        $params = $request->query->all();
+
+        $em = $this->getDoctrine()->getManager();
+        $review = $em->getRepository(Reviews::class)->find($params['id']);
+
+        if (!$review) {
+            throw $this->createNotFoundException(
+                'No review found for id '.$params['id']
+            );
+        }
+
+        //flip value: disproved gets approved and vice versa
+        $review->setIsApproved(!(boolval($params['isApproved'])));
+        $em->flush();
+
+        return $this->redirectToRoute('admin_index');
+
     }
 
 }
