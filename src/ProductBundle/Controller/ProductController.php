@@ -25,7 +25,6 @@ class ProductController extends Controller
      */
     public function indexAction()
     {
-        die("kwo");
         $em = $this->getDoctrine()->getManager();
 
         $products = $em->getRepository('ProductBundle:Product')->findAll();
@@ -74,10 +73,15 @@ class ProductController extends Controller
         $deleteForm = $this->createDeleteForm($product);
 
         $reviewsByProduct = $em->getRepository('ProductBundle:Product')->loadAverageProductRating($product->getId());
-//        die(var_dump($reviewsByProduct));
+        if(isset($reviewsByProduct[0]['product_rate'])) {
+            $productRate = number_format($reviewsByProduct[0]['product_rate'],2);
+        }
+        else {
+            $productRate = 'no ratings yet';
+        }
         return $this->render('product/show.html.twig', array(
             'product' => $product,
-            'reviews' => ['rating'=> 'no reviews yet'],
+            'reviews' => ['rating'=> $productRate],
             'delete_form' => $deleteForm->createView(),
         ));
     }

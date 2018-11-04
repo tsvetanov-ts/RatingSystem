@@ -31,7 +31,7 @@ $review_repo = $em
     ->getRepository('ProductBundle:Reviews');
 
 
-//var_dump($product_repo->loadAverageProductRating(2));
+var_dump($product_repo->loadAverageProductRating(2));
 //var_dump($product_repo->loadTopRatedProducts(5));
 //var_dump($product_repo->selectStar());
-var_dump($review_repo->findAll());
+//var_dump($review_repo->findAll());

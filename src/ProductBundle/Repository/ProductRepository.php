@@ -16,7 +16,7 @@ class ProductRepository extends EntityRepository
     public function loadTopRatedProducts($limit = 5)
     {
         $query = $this->getEntityManager()->createQuery('SELECT p.id, p.name, AVG(r.rating) product_rate FROM ProductBundle\Entity\Product p 
-                                                            JOIN ProductBundle\Entity\Reviews r WHERE p.id = r.products 
+                                                            JOIN ProductBundle\Entity\Reviews r WHERE p.id = r.products AND r.isApproved = 1
                                                             GROUP BY r.products ORDER BY product_rate DESC')->setMaxResults($limit);
 
         return $query->getResult();
@@ -25,7 +25,7 @@ class ProductRepository extends EntityRepository
     public function loadAverageProductRating($productId)
     {
         $query = $this->getEntityManager()->createQuery('SELECT p.name, AVG(r.rating) product_rate FROM ProductBundle\Entity\Product p 
-                                                            JOIN ProductBundle\Entity\Reviews r WHERE p.id = ?1 
+                                                            JOIN ProductBundle\Entity\Reviews r WHERE r.products = p.id AND p.id = ?1 AND r.isApproved = 1
                                                             GROUP BY r.products');
         $query->setParameter(1,$productId);
 
